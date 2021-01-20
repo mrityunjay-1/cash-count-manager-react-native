@@ -17,8 +17,6 @@ const reducer = (state, action) => {
         return items.id !== action.payload.id;
       })
       return new_data;
-
-
     default:
       return state;
   }
@@ -33,9 +31,8 @@ export const ContextProvider = ({ children }) => {
     const fetchData = async () => {
       let async_storage_data = await AsyncStorage.getItem("user1234");
 
-
       if (async_storage_data) {
-        console.log("NO data");
+        console.log("No Data");
         return;
       }
 
