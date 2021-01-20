@@ -7,6 +7,11 @@ import CentralDataCenter from '../context/CentralDataCenter';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const reducer = (state, { type, payload }) => {
+  if (isNaN(payload.notes)) {
+    payload.notes = 0;
+    alert("You are not supposed to enter only numbers...");
+  }
+
   let data = { ...state };
   data[type] = { notes: payload.notes, total_amount: payload.total_amount };
 
