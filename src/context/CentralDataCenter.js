@@ -55,8 +55,13 @@ export const ContextProvider = ({ children }) => {
     await AsyncStorage.setItem('user1234', JSON.stringify(data));
   }
 
+  const setData = (data) => {
+    console.log("Set Data from CentralDataCenter = ", data);
+    dispatch({ type: "setData", payload: data });
+  };
+
   return (
-    <CentralDataCenter.Provider value={{ data, addData, deleteData }}>
+    <CentralDataCenter.Provider value={{ data, addData, deleteData, setData }}>
       {children}
     </CentralDataCenter.Provider>
   );

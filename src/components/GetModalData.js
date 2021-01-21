@@ -36,14 +36,14 @@ const GetModalData = ({ modal, navigation, data }) => {
         <GetDetails sr={9} amount={2} data={data.two} />
         <GetDetails sr={10} amount={1} data={data.one} />
 
-        <Text style={{ backgroundColor: 'red' }}></Text>
+        <View style={{ height: 2, backgroundColor: 'grey' }}></View>
 
         <Text style={{ fontSize: 20, textAlign: 'right', marginHorizontal: 40 }} > {data.final_amount} </Text>
         <Text> </Text>
         <Text> </Text>
         <Text> </Text>
 
-        <Button onPress={() => { modal(false); navigation.navigate("ShowData"); }} title="Edit" />
+        <Button onPress={() => { modal(false); navigation.navigate("ShowData", { data }); }} title="Edit" />
       </ScrollView>
     </>
   );
