@@ -1,4 +1,4 @@
-import React, { useReducer, useContext } from 'react';
+import React, { useReducer, useContext, useEffect } from 'react';
 import { Text, View, ScrollView, FlatList, TouchableOpacity, Button } from 'react-native';
 import CalcComponent from '../components/CalcComponent';
 import { Feather } from '@expo/vector-icons';
@@ -30,10 +30,10 @@ const reducer = (state, { type, payload }) => {
 };
 
 const IndexScreen = ({ navigation }) => {
-  const { addData } = useContext(CentralDataCenter);
+  const { data, addData } = useContext(CentralDataCenter);
   const [state, dispatch] = useReducer(reducer, { tt: { notes: 0, total_amount: 0 }, fh: { notes: 0, total_amount: 0 }, th: { notes: 0, total_amount: 0 }, oh: { notes: 0, total_amount: 0 }, fifty: { notes: 0, total_amount: 0 }, twenty: { notes: 0, total_amount: 0 }, ten: { notes: 0, total_amount: 0 }, five: { notes: 0, total_amount: 0 }, two: { notes: 0, total_amount: 0 }, one: { notes: 0, total_amount: 0 }, final_notes: 0, final_amount: 0 });
 
-  // console.log(data);
+
 
   return (
     <View style={{ flex: 1 }}>
@@ -57,7 +57,16 @@ const IndexScreen = ({ navigation }) => {
       </ScrollView>
 
       <View style={{ flexDirection: 'row', justifyContent: 'space-around', padding: 20 }}>
-        <Button onPress={() => { addData({ state }); }} title="Save" />
+        <Button onPress={async () => {
+          addData(state);
+          state.id = `item${Math.floor(Math.random() * 5000)}`;
+
+          // inally lets have a look at state
+          console.log(state);
+
+
+          await AsyncStorage.setItem(state.id, JSON.stringify(state));
+        }} title="Save" />
         <Button onPress={() => { navigation.navigate("DataViewer"); }} title="get data" />
       </View>
     </View>

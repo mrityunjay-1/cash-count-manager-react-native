@@ -6,10 +6,11 @@ const CentralDataCenter = createContext();
 const reducer = (state, action) => {
   switch (action.type) {
     case "getData":
-      return action.payload.data;
+      return action.payload;
 
     case "addData":
-      return [...state, action.payload];
+      let new_data123 = [...state, action.payload];
+      return new_data123;
 
     case 'deleteData':
       // console.log(action.payload); // its an object
@@ -29,39 +30,36 @@ export const ContextProvider = ({ children }) => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      let async_storage_data = await AsyncStorage.getItem("user1234");
+      let initial_data = [];
+      let all_key = await AsyncStorage.getAllKeys();
 
-      if (async_storage_data) {
-        console.log("No Data");
-        return;
-      }
 
-      dispatch({ type: "getData", payload: { data: JSON.parse(async_storage_data) } });
+      all_key.forEach(async (item) => {
+        let getData = await AsyncStorage.getItem(item);
+        console.log("Get Data = ", getData);
+        initial_data.push(JSON.parse(getData));
+      });
+
+      // finally submit it to the CentralDataCenter;
+      dispatch({ type: "getData", payload: initial_data });
+
     };
     fetchData();
   }, []);
 
 
-  const addData = async ({ state }) => {
-    // console.log(state);
-    dispatch({ type: "addData", payload: { id: `${Math.floor(Math.random() * 500000)}`, ...state } });
-    // console.log(data);
-    await AsyncStorage.setItem("user1234", JSON.stringify(data));
+  const addData = async (state) => {
+    dispatch({ type: "addData", payload: state });
   };
 
   const deleteData = async ({ id }) => {
-    // console.log("delete in Central = ", id);
-    dispatch({ type: 'deleteData', payload: { id } });
-    await AsyncStorage.setItem('user1234', JSON.stringify(data));
+    await AsyncStorage.removeAllKey();
+    // dispatch({ type: 'deleteData', payload: { id } });
+    // await AsyncStorage.setItem('user1234', JSON.stringify(data));
   }
 
-  const setData = (data) => {
-    console.log("Set Data from CentralDataCenter = ", data);
-    dispatch({ type: "setData", payload: data });
-  };
-
   return (
-    <CentralDataCenter.Provider value={{ data, addData, deleteData, setData }}>
+    <CentralDataCenter.Provider value={{ data, addData, deleteData }}>
       {children}
     </CentralDataCenter.Provider>
   );
